@@ -60,6 +60,7 @@ foreach ($dir in Get-ChildItem -Path $weaponsDir -Directory | Sort-Object Name) 
     }
 }
 if ($weapons.Count -eq 0) { throw "no weapon.ini found under $weaponsDir" }
+$knownPaks = @($weapons | ForEach-Object { $_.pak })
 
 # --- repak (download on first run) ---
 if (-not (Test-Path $repak)) {
@@ -73,7 +74,7 @@ if (-not (Test-Path $repak)) {
 if (-not (Test-Path $repak)) { throw "repak.exe not found at $repak" }
 
 # --- generate payloads ---
-if (Test-Path $distDir) { Get-ChildItem $distDir -Filter "Swayless_*_P.pak" | Remove-Item -Force }
+if (Test-Path $distDir) { foreach ($p in $knownPaks) { $f = Join-Path $distDir $p; if (Test-Path $f) { Remove-Item -LiteralPath $f -Force } } }
 else { New-Item -ItemType Directory -Path $distDir -Force | Out-Null }
 $buildRoot = Join-Path $env:TEMP "opencode\weaponswayless_build"
 if (Test-Path $buildRoot) { Remove-Item -LiteralPath $buildRoot -Recurse -Force }
@@ -210,7 +211,12 @@ if (-not $Target) {
 if (-not (Test-Path $Target)) { New-Item -ItemType Directory -Path $Target -Force | Out-Null }
 
 $built = @(Get-ChildItem $distDir -Filter "Swayless_*_P.pak" | ForEach-Object { $_.Name })
-Get-ChildItem $Target -Filter "Swayless_*_P.pak" | Where-Object { $built -notcontains $_.Name } | Remove-Item -Force
+foreach ($p in $knownPaks) {
+    if (($built -notcontains $p) -and (Test-Path (Join-Path $Target $p))) {
+        Remove-Item -LiteralPath (Join-Path $Target $p) -Force
+        Write-Host "removed stale $p"
+    }
+}
 if (Test-Path (Join-Path $Target $legacyPak)) { Remove-Item -LiteralPath (Join-Path $Target $legacyPak) -Force }
 foreach ($p in Get-ChildItem $distDir -Filter "Swayless_*_P.pak") {
     Copy-Item -LiteralPath $p.FullName -Destination (Join-Path $Target $p.Name) -Force
