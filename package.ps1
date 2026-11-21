@@ -22,12 +22,12 @@ $mods = Join-Path $stage "Stalker2\Content\Paks\~mods"
 New-Item -ItemType Directory -Path $mods -Force | Out-Null
 foreach ($p in $paks) { Copy-Item -LiteralPath $p.FullName -Destination (Join-Path $mods $p.Name) }
 
-# Rebuild inputs: edit weapons\<name>\weapon.ini, run Configure\Deploy.ps1.
+# Rebuild inputs: edit weapons.ini, run Configure\Deploy.ps1.
 $configure = Join-Path $stage "Configure"
 New-Item -ItemType Directory -Path $configure -Force | Out-Null
 Copy-Item (Join-Path $root "Deploy.ps1") (Join-Path $configure "Deploy.ps1")
 Copy-Item (Join-Path $root "README.md") (Join-Path $configure "README.md")
-Copy-Item (Join-Path $root "weapons") (Join-Path $configure "weapons") -Recurse
+Copy-Item (Join-Path $root "weapons.ini") (Join-Path $configure "weapons.ini")
 if (Test-Path (Join-Path $root "deploy.target")) { Copy-Item (Join-Path $root "deploy.target") (Join-Path $configure "deploy.target") }
 
 Add-Type -AssemblyName System.IO.Compression.FileSystem

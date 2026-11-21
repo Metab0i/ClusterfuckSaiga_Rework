@@ -1,7 +1,7 @@
-# Build WeaponSwayless: one pak per weapon, configured in weapons\<name>\weapon.ini.
+# Build WeaponSwayless: one pak per weapon, all configured in weapons.ini.
 #
 #   .\Deploy.ps1            -> generate + pack + install into ~mods
-#   .\Deploy.ps1 -NoDeploy  -> generate + pack only (dist\Swayless_<Weapon>_P.pak)
+#   .\Deploy.ps1 -NoDeploy  -> generate + pack only (dist\Swayless_<weapon>_P.pak)
 #   .\Deploy.ps1 -Target "D:\...\Stalker2\Content\Paks\~mods"
 param(
     [string]$Target = "",
@@ -10,7 +10,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
-$weaponsDir = Join-Path $root "weapons"
+$iniPath = Join-Path $root "weapons.ini"
 $distDir = Join-Path $root "dist"
 $repak = Join-Path $root "tools\repak\repak.exe"
 $SteamAppId = "1643320"
@@ -18,13 +18,21 @@ $GameFolderName = "S.T.A.L.K.E.R. 2 Heart of Chornobyl"
 $legacyPak = "ClusterfuckStability_P.pak"
 
 function Read-Ini($path) {
-    $cfg = @{}
+    $sections = [ordered]@{}
+    $current = $null
     foreach ($line in Get-Content -LiteralPath $path) {
         $t = $line.Trim()
         if (-not $t -or $t.StartsWith(";") -or $t.StartsWith("#")) { continue }
-        if ($t -match '^([^=]+)=(.*)$') { $cfg[$Matches[1].Trim().ToLower()] = $Matches[2].Trim() }
+        if ($t -match '^\[(.+)\]$') {
+            $current = $Matches[1].Trim().ToLower()
+            $sections[$current] = @{}
+            continue
+        }
+        if ($t -match '^([^=]+)=(.*)$' -and $current) {
+            $sections[$current][$Matches[1].Trim().ToLower()] = $Matches[2].Trim()
+        }
     }
-    return $cfg
+    return $sections
 }
 
 function Get-Int($cfg, $key, $default) {
@@ -34,21 +42,19 @@ function Get-Int($cfg, $key, $default) {
     return $v
 }
 
-if (-not (Test-Path $weaponsDir)) { throw "weapons folder not found: $weaponsDir" }
+if (-not (Test-Path $iniPath)) { throw "config not found: $iniPath" }
+$ini = Read-Ini $iniPath
 
-# --- read weapon configs ---
 $weapons = @()
-foreach ($dir in Get-ChildItem -Path $weaponsDir -Directory | Sort-Object Name) {
-    $iniPath = Join-Path $dir.FullName "weapon.ini"
-    if (-not (Test-Path $iniPath)) { continue }
-    $cfg = Read-Ini $iniPath
-    $name = $dir.Name.ToLower()
+foreach ($name in $ini.Keys) {
+    if ($name -eq "mod") { continue }
+    $cfg = $ini[$name]
     if (-not $cfg.ContainsKey("setup")) { throw "${name}: missing setup" }
     $sway = Get-Int $cfg "sway" 80
     if ($sway -lt 0 -or $sway -gt 100) { throw "${name}: sway must be 0-100" }
     $weapons += [pscustomobject]@{
         name = $name
-        label = $(if ($cfg.ContainsKey("label")) { $cfg["label"] } else { $dir.Name })
+        label = $(if ($cfg.ContainsKey("label")) { $cfg["label"] } else { $name })
         setup = $cfg["setup"]
         dlc = (Get-Int $cfg "dlc" 0) -ne 0
         enabled = (Get-Int $cfg "enabled" 1) -ne 0
@@ -56,10 +62,11 @@ foreach ($dir in Get-ChildItem -Path $weaponsDir -Directory | Sort-Object Name) 
         attachment = $(if ($cfg.ContainsKey("attachment")) { $cfg["attachment"] } else { "" })
         holdBreath = (Get-Int $cfg "hold_breath" 0) -ne 0
         x = "Swayless_${name}_X"; y = "Swayless_${name}_Y"; template = "Swayless_${name}_Template"
-        pak = "Swayless_$($dir.Name)_P.pak"
+        pak = "Swayless_${name}_P.pak"
     }
 }
-if ($weapons.Count -eq 0) { throw "no weapon.ini found under $weaponsDir" }
+if ($weapons.Count -eq 0) { throw "no weapon sections found in $iniPath" }
+
 $knownPaks = @($weapons | ForEach-Object { $_.pak })
 
 # --- repak (download on first run) ---

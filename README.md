@@ -8,11 +8,11 @@ Copy the paks from `Stalker2\Content\Paks\~mods` into your game's `~mods` folder
 
 ## Configure
 
-Edit `Configure\weapons\<name>\weapon.ini`:
+Edit `Configure\weapons.ini`, one section per weapon:
 
 - `enabled=1` / `0` — patch this weapon or leave it vanilla
 - `sway=0-100` — percent of idle sway removed
 
 Then run `Configure\Deploy.ps1` and restart the game. Configuration is build-time only: paks are generated from these values, so editing the ini after installing does nothing until the script runs.
 
-Supported weapons: `weapons\clusterfuck` (Clusterfuck) and `weapons\justice` (Justice, Cost of Hope). Adding another weapon is a new `weapon.ini` with its `setup`/`dlc` values.
+Supported today: `[clusterfuck]` (Clusterfuck) and `[justice]` (Justice, Cost of Hope). Another weapon is one more section with its `setup`/`dlc` values.
