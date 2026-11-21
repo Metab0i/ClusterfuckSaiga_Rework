@@ -1,7 +1,7 @@
-# Build ClusterfuckStability_P.pak and copy it into the game's ~mods folder.
+# Build WeaponSwayless: one pak per weapon, configured in weapons\<name>\weapon.ini.
 #
-#   .\Deploy.ps1            -> pack + install
-#   .\Deploy.ps1 -NoDeploy  -> pack only (dist\ClusterfuckStability_P.pak)
+#   .\Deploy.ps1            -> generate + pack + install into ~mods
+#   .\Deploy.ps1 -NoDeploy  -> generate + pack only (dist\Swayless_<Weapon>_P.pak)
 #   .\Deploy.ps1 -Target "D:\...\Stalker2\Content\Paks\~mods"
 param(
     [string]$Target = "",
@@ -10,16 +10,58 @@ param(
 
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
-$modDir = Join-Path $root "mod\ClusterfuckStability_P"
-$pakName = "ClusterfuckStability_P.pak"
+$weaponsDir = Join-Path $root "weapons"
 $distDir = Join-Path $root "dist"
-$pakPath = Join-Path $distDir $pakName
 $repak = Join-Path $root "tools\repak\repak.exe"
 $SteamAppId = "1643320"
 $GameFolderName = "S.T.A.L.K.E.R. 2 Heart of Chornobyl"
+$legacyPak = "ClusterfuckStability_P.pak"
 
-if (-not (Test-Path (Join-Path $modDir "Stalker2"))) { throw "mod payload not found: $modDir" }
+function Read-Ini($path) {
+    $cfg = @{}
+    foreach ($line in Get-Content -LiteralPath $path) {
+        $t = $line.Trim()
+        if (-not $t -or $t.StartsWith(";") -or $t.StartsWith("#")) { continue }
+        if ($t -match '^([^=]+)=(.*)$') { $cfg[$Matches[1].Trim().ToLower()] = $Matches[2].Trim() }
+    }
+    return $cfg
+}
 
+function Get-Int($cfg, $key, $default) {
+    if (-not $cfg.ContainsKey($key)) { return $default }
+    $v = 0
+    if (-not [int]::TryParse($cfg[$key], [ref]$v)) { throw "bad value for ${key}: '$($cfg[$key])'" }
+    return $v
+}
+
+if (-not (Test-Path $weaponsDir)) { throw "weapons folder not found: $weaponsDir" }
+
+# --- read weapon configs ---
+$weapons = @()
+foreach ($dir in Get-ChildItem -Path $weaponsDir -Directory | Sort-Object Name) {
+    $iniPath = Join-Path $dir.FullName "weapon.ini"
+    if (-not (Test-Path $iniPath)) { continue }
+    $cfg = Read-Ini $iniPath
+    $name = $dir.Name.ToLower()
+    if (-not $cfg.ContainsKey("setup")) { throw "${name}: missing setup" }
+    $sway = Get-Int $cfg "sway" 80
+    if ($sway -lt 0 -or $sway -gt 100) { throw "${name}: sway must be 0-100" }
+    $weapons += [pscustomobject]@{
+        name = $name
+        label = $(if ($cfg.ContainsKey("label")) { $cfg["label"] } else { $dir.Name })
+        setup = $cfg["setup"]
+        dlc = (Get-Int $cfg "dlc" 0) -ne 0
+        enabled = (Get-Int $cfg "enabled" 1) -ne 0
+        sway = $sway
+        attachment = $(if ($cfg.ContainsKey("attachment")) { $cfg["attachment"] } else { "" })
+        holdBreath = (Get-Int $cfg "hold_breath" 0) -ne 0
+        x = "Swayless_${name}_X"; y = "Swayless_${name}_Y"; template = "Swayless_${name}_Template"
+        pak = "Swayless_$($dir.Name)_P.pak"
+    }
+}
+if ($weapons.Count -eq 0) { throw "no weapon.ini found under $weaponsDir" }
+
+# --- repak (download on first run) ---
 if (-not (Test-Path $repak)) {
     Write-Host "repak not found, downloading..."
     $tmp = Join-Path $root "tools\repak.zip"
@@ -30,16 +72,82 @@ if (-not (Test-Path $repak)) {
 }
 if (-not (Test-Path $repak)) { throw "repak.exe not found at $repak" }
 
-New-Item -ItemType Directory -Path $distDir -Force | Out-Null
-if (Test-Path $pakPath) { Remove-Item -LiteralPath $pakPath -Force }
+# --- generate payloads ---
+if (Test-Path $distDir) { Get-ChildItem $distDir -Filter "Swayless_*_P.pak" | Remove-Item -Force }
+else { New-Item -ItemType Directory -Path $distDir -Force | Out-Null }
+$buildRoot = Join-Path $env:TEMP "opencode\weaponswayless_build"
+if (Test-Path $buildRoot) { Remove-Item -LiteralPath $buildRoot -Recurse -Force }
 
-Write-Host "packing $modDir"
-& $repak pack $modDir $pakPath -m "../../../" --version V11
-if ($LASTEXITCODE -ne 0) { throw "repak pack failed with exit code $LASTEXITCODE" }
-if (-not (Test-Path $pakPath)) { throw "pak was not created: $pakPath" }
+foreach ($w in $weapons) {
+    if (-not $w.enabled -or $w.sway -eq 0) {
+        Write-Host ("{0}: disabled" -f $w.label)
+        continue
+    }
 
-& $repak info $pakPath
-& $repak list $pakPath
+    $stage = Join-Path $buildRoot $w.name
+    $gamedata = Join-Path $stage "Stalker2\Content\GameLite\GameData"
+    New-Item -ItemType Directory -Path $gamedata -Force | Out-Null
+
+    $neg = "-$($w.sway)%"
+    $effectDir = Join-Path $gamedata "EffectPrototypes"
+    New-Item -ItemType Directory -Path $effectDir -Force | Out-Null
+    @"
+$($w.template) : struct.begin {refurl=../EffectPrototypes.cfg; refkey=[0]}
+    SID = $($w.template)
+    Type = EEffectType::None
+    bIsPermanent = true
+    ValueMin = $neg
+    ValueMax = $neg
+struct.end
+
+$($w.x) : struct.begin {refkey=$($w.template)}
+    SID = $($w.x)
+    Type = EEffectType::IdleSwayXModifier
+struct.end
+
+$($w.y) : struct.begin {refkey=$($w.template)}
+    SID = $($w.y)
+    Type = EEffectType::IdleSwayYModifier
+struct.end
+"@ | Set-Content -LiteralPath (Join-Path $effectDir "EffectPrototypes_patch_$($w.name).cfg") -Encoding Ascii
+
+    $setupBlock = @"
+$($w.setup) : struct.begin {bpatch}
+   AimingEffects : struct.begin {bpatch}
+      PlayerOnlyEffects : struct.begin {bpatch}
+         [*] = $($w.x)
+         [*] = $($w.y)
+      struct.end
+   struct.end
+struct.end
+"@
+    $setupRel = if ($w.dlc) { "DLCGameData\DLC1\WeaponData\WeaponGeneralSetupPrototypes" } else { "GameData\WeaponData\WeaponGeneralSetupPrototypes" }
+    New-Item -ItemType Directory -Path (Join-Path $stage ("Stalker2\Content\GameLite\" + $setupRel)) -Force | Out-Null
+    $setupBlock | Set-Content -LiteralPath (Join-Path $stage ("Stalker2\Content\GameLite\" + $setupRel + "\WeaponGeneralSetupPrototypes_patch_$($w.name).cfg")) -Encoding Ascii
+
+    if ($w.attachment) {
+        $attachDir = Join-Path $gamedata "ItemPrototypes\AttachPrototypes"
+        New-Item -ItemType Directory -Path $attachDir -Force | Out-Null
+        $holdLine = if ($w.holdBreath) { "   CanHoldBreath = true`n" } else { "" }
+        @"
+$($w.attachment) : struct.begin {bpatch}
+$holdLine   Scope : struct.begin {bpatch}
+      AimingEffects : struct.begin {bpatch}
+         PlayerOnlyEffects : struct.begin {bpatch}
+            [*] = $($w.x)
+            [*] = $($w.y)
+         struct.end
+      struct.end
+   struct.end
+struct.end
+"@ | Set-Content -LiteralPath (Join-Path $attachDir "AttachPrototypes_patch_$($w.name).cfg") -Encoding Ascii
+    }
+
+    $pakPath = Join-Path $distDir $w.pak
+    & $repak pack $stage $pakPath -m "../../../" --version V11 | Out-Null
+    if ($LASTEXITCODE -ne 0 -or -not (Test-Path $pakPath)) { throw "repak pack failed for $($w.name)" }
+    Write-Host ("{0}: -{1}% -> {2}" -f $w.label, $w.sway, $w.pak)
+}
 
 function Find-GameRoot {
     $cfg = Join-Path $root "deploy.target"
@@ -47,7 +155,6 @@ function Find-GameRoot {
         $p = (Get-Content $cfg -Raw).Trim()
         if ($p -and (Test-Path (Join-Path $p "Stalker2\Binaries\Win64"))) { return $p }
     }
-
     foreach ($key in @(
         "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App $SteamAppId",
         "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App $SteamAppId",
@@ -58,7 +165,6 @@ function Find-GameRoot {
             if ($loc -and (Test-Path (Join-Path $loc "Stalker2\Binaries\Win64"))) { return $loc }
         } catch { }
     }
-
     $libraries = @()
     foreach ($key in @("HKCU:\Software\Valve\Steam", "HKLM:\SOFTWARE\WOW6432Node\Valve\Steam", "HKLM:\SOFTWARE\Valve\Steam")) {
         try {
@@ -88,7 +194,7 @@ function Find-GameRoot {
 }
 
 if ($NoDeploy) {
-    Write-Host "packed $pakPath (not deployed)" -ForegroundColor Green
+    Write-Host "packed into $distDir (not deployed)" -ForegroundColor Green
     exit 0
 }
 
@@ -102,5 +208,11 @@ if (-not $Target) {
 }
 
 if (-not (Test-Path $Target)) { New-Item -ItemType Directory -Path $Target -Force | Out-Null }
-Copy-Item -LiteralPath $pakPath -Destination (Join-Path $Target $pakName) -Force
-Write-Host "deployed $pakName to $Target" -ForegroundColor Green
+
+$built = @(Get-ChildItem $distDir -Filter "Swayless_*_P.pak" | ForEach-Object { $_.Name })
+Get-ChildItem $Target -Filter "Swayless_*_P.pak" | Where-Object { $built -notcontains $_.Name } | Remove-Item -Force
+if (Test-Path (Join-Path $Target $legacyPak)) { Remove-Item -LiteralPath (Join-Path $Target $legacyPak) -Force }
+foreach ($p in Get-ChildItem $distDir -Filter "Swayless_*_P.pak") {
+    Copy-Item -LiteralPath $p.FullName -Destination (Join-Path $Target $p.Name) -Force
+    Write-Host "deployed $($p.Name)"
+}
