@@ -1,39 +1,48 @@
-# WeaponSwayless
+# Clusterfuck Saiga Rework
 
-Removes idle weapon sway for selected weapons in S.T.A.L.K.E.R. 2 using player-only aiming effects. No DLL, no script extender — each weapon is a game-data pak.
+Adds technician upgrades to S.T.A.L.K.E.R. 2 weapons. Game-data pak only - no DLL, no script extender.
 
 ## Install
 
-Copy the paks from `Stalker2\Content\Paks\~mods` into your game's `~mods` folder and restart the game. Works as shipped with the default configuration.
+Copy `ClusterfuckSaigaRework_P.pak` from `Stalker2\Content\Paks\~mods` into your game's `~mods` folder and restart the game.
 
-## Configure
+## Clusterfuck
 
-Edit `Configure\weapons.ini`, one section per weapon:
+The AR416 "Clusterfuck" keeps its vanilla sway at base. New upgrades at any technician:
 
-- `enabled=1` / `0` — patch this weapon or leave it vanilla
-- `sway=0-100` — percent of idle sway removed
+| Upgrade | Part | Cost | Effect |
+| --- | --- | --- | --- |
+| Adjustable cheek riser | Stock | 10,000 | Sway -40% |
+| Free-float handguard with handstop | Handguard | 10,000 | Sway -40% |
+| Match-length handguard | Handguard | 9,000 | Damage falloff pushed further out (+30%) |
+| High-pressure bolt and chamber | Body | 12,000 | Damage +45% |
+| Cut-rifled AP barrel | Barrel | 7,500 | Armor penetration +25% |
 
-Configuration is **build-time**: `weapons.ini` only tells the generator what to write into the pak, so after editing you must rerun `Configure\Deploy.ps1` and restart the game. A live, in-game ini is not possible with this design; pak content is loaded at startup.
+The two sway upgrades stack to roughly the old no-sway baseline. The match-length handguard requires the free-float handguard; the rest are standalone.
 
-Supported today: `[clusterfuck]` (Clusterfuck) and `[justice]` (Justice, Cost of Hope). Another weapon is one more section with its `setup`/`dlc` values.
+Upgrades are plain data - the game's own effect prototypes are reused wherever the values match, and custom effects are defined in the mod so no vanilla stat is changed.
+
+## Layout
+
+```
+src/Stalker2/Content/GameLite/GameData/
+  EffectPrototypes/EffectPrototypes_patch_ClusterfuckRework.cfg
+  UpgradePrototypes/UpgradePrototypes_patch_ClusterfuckRework.cfg
+  WeaponData/WeaponGeneralSetupPrototypes/WeaponGeneralSetupPrototypes_patch_ClusterfuckRework.cfg
+```
 
 ## Scripts
 
-`Deploy.ps1` — generates and builds the paks, then installs them.
-
-1. Reads `weapons.ini` and validates each section.
-2. Writes per-weapon patch configs (sway effect prototypes plus the weapon's aiming-effects entry) into a temporary build folder.
-3. Packs each weapon into `dist\Swayless_<weapon>_P.pak` with `repak` (auto-downloads it to `tools\repak` on first run).
-4. Copies the paks into the game's `~mods` folder, removing stale paks for weapons you disabled, and the legacy combined pak.
+`Deploy.ps1` - packs `src\` into `dist\ClusterfuckSaigaRework_P.pak`, installs it into `~mods`, and removes paks from the previous mod versions.
 
 ```powershell
 .\Deploy.ps1                 # build + install
-.\Deploy.ps1 -NoDeploy       # build only, output in dist\
+.\Deploy.ps1 -NoDeploy       # build only
 .\Deploy.ps1 -Target "<game>\Stalker2\Content\Paks\~mods"
 ```
 
-`package.ps1` — builds the distributable zip: the paks at their game path plus `Configure\` (this README, `Deploy.ps1`, `weapons.ini`).
+`package.ps1` - builds the distributable zip with the pak at its game path plus this README.
 
 ```powershell
-.\package.ps1 -Version 1.1   # -> dist\WeaponSwayless_1.1.zip
+.\package.ps1 -Version 1.0   # -> dist\ClusterfuckSaigaRework_1.0.zip
 ```
