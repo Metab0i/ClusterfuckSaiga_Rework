@@ -11,7 +11,7 @@ $distDir = Join-Path $root "dist"
 $pakName = "ClusterfuckSaigaRework_P.pak"
 $pak = Join-Path $distDir $pakName
 
-if (-not (Test-Path $pak)) { throw "$pakName not found; run .\Deploy.ps1 -NoDeploy first" }
+if (-not (Test-Path $pak)) { throw "$pakName not found; run .\build.ps1 -NoDeploy first" }
 
 $stage = Join-Path $env:TEMP "opencode\clusterfucksaiga_pkg"
 if (Test-Path $stage) { Remove-Item -LiteralPath $stage -Recurse -Force }

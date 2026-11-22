@@ -1,6 +1,6 @@
-# Clusterfuck Saiga Rework
+# Stalker 2 - Saiga, AK-74S, Clusterf Overhaul
 
-Adds technician upgrades to S.T.A.L.K.E.R. 2 weapons. Game-data pak only - no DLL, no script extender.
+Game-data overhaul for S.T.A.L.K.E.R. 2: new technician upgrades for selected weapons. Pak only - no DLL, no script extender.
 
 ## Install
 
@@ -8,7 +8,7 @@ Copy `ClusterfuckSaigaRework_P.pak` from `Stalker2\Content\Paks\~mods` into your
 
 ## Clusterfuck
 
-The AR416 "Clusterfuck" keeps its vanilla sway at base. New upgrades at any technician:
+The AR416 "Clusterfuck" keeps its vanilla sway at base. New upgrades at any technician, base game and Cost of Hope:
 
 | Upgrade | Part | Cost | Effect |
 | --- | --- | --- | --- |
@@ -21,6 +21,24 @@ The AR416 "Clusterfuck" keeps its vanilla sway at base. New upgrades at any tech
 The two sway upgrades stack to roughly the old no-sway baseline. All five are standalone purchases.
 
 Upgrades are plain data - the game's own effect prototypes are reused wherever the values match, and custom effects are defined in the mod so no vanilla stat is changed. The Clusterfuck's weapon prototype ships its Handguard section disabled, so its upgrades live on the Stock, Grip, Body and Barrel sections that have markers.
+
+## Saiga D-12
+
+WIP.
+
+## AK-74S
+
+WIP.
+
+## Requirements
+
+`build.ps1` needs:
+
+- Windows with PowerShell 5.1 or newer
+- Internet access on first run: `repak` is downloaded automatically into `tools\repak` if missing
+- No game installation required to build; installation into `~mods` needs the game path or `-Target`
+
+No Python, Node, or game SDK is used by the build.
 
 ## Layout
 
@@ -38,12 +56,12 @@ Upgrades are only installable where the technician's own `Upgrades` list contain
 
 ## Scripts
 
-`Deploy.ps1` - packs `src\` into `dist\ClusterfuckSaigaRework_P.pak`, installs it into `~mods`, and removes paks from the previous mod versions.
+`build.ps1` - packs `src\` into `dist\ClusterfuckSaigaRework_P.pak` and installs it into `~mods`.
 
 ```powershell
-.\Deploy.ps1                 # build + install
-.\Deploy.ps1 -NoDeploy       # build only
-.\Deploy.ps1 -Target "<game>\Stalker2\Content\Paks\~mods"
+.\build.ps1                  # build + install
+.\build.ps1 -NoDeploy        # build only
+.\build.ps1 -Target "<game>\Stalker2\Content\Paks\~mods"
 ```
 
 `package.ps1` - builds the distributable zip with the pak at its game path plus this README.

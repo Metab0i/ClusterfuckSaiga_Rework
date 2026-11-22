@@ -1,8 +1,8 @@
-# Build Clusterfuck Saiga Rework: packs src\ into one game-data pak and installs it.
+# Build Stalker 2 - Saiga, AK-74S, Clusterf Overhaul: packs src\ into one game-data pak and installs it.
 #
-#   .\Deploy.ps1                                  -> pack + install into ~mods
-#   .\Deploy.ps1 -NoDeploy                        -> pack only (dist\ClusterfuckSaigaRework_P.pak)
-#   .\Deploy.ps1 -Target "D:\...\Stalker2\Content\Paks\~mods"
+#   .\build.ps1                                   -> pack + install into ~mods
+#   .\build.ps1 -NoDeploy                         -> pack only (dist\ClusterfuckSaigaRework_P.pak)
+#   .\build.ps1 -Target "D:\...\Stalker2\Content\Paks\~mods"
 param(
     [switch]$NoDeploy,
     [string]$Target
@@ -14,7 +14,6 @@ $srcDir = Join-Path $root "src"
 $distDir = Join-Path $root "dist"
 $pakName = "ClusterfuckSaigaRework_P.pak"
 $repak = Join-Path $root "tools\repak\repak.exe"
-$legacyPaks = @("ClusterfuckStability_P.pak", "weaponswayless_P.pak")
 
 function Find-GameRoot {
     $hint = Join-Path $root "deploy.target"
@@ -60,12 +59,3 @@ if (-not (Test-Path $Target)) { New-Item -ItemType Directory -Path $Target -Forc
 
 Copy-Item -LiteralPath $outPak -Destination (Join-Path $Target $pakName) -Force
 Write-Host "installed $pakName to $Target"
-
-foreach ($old in $legacyPaks) {
-    $p = Join-Path $Target $old
-    if (Test-Path $p) { Remove-Item -LiteralPath $p -Force; Write-Host "removed legacy $old" }
-}
-foreach ($p in Get-ChildItem $Target -Filter "Swayless_*_P.pak" -ErrorAction SilentlyContinue) {
-    Remove-Item -LiteralPath $p.FullName -Force
-    Write-Host "removed legacy $($p.Name)"
-}
