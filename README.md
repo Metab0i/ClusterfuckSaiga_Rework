@@ -22,7 +22,7 @@ Restart the game.
 
 ## Clusterfuck
 
-The AR416 "Clusterfuck" keeps its vanilla sway at base. The five upgrades are sold only by late-game technicians - the ones who can also install exoskeleton and Saiga D-12 upgrades:
+The AR416 "Clusterfuck" keeps its vanilla sway at base. The five upgrades are sold only by technicians who can install the full Saiga D-12 upgrade tree - late-game techs in practice:
 
 | Upgrade | Part | Cost | Effect |
 | --- | --- | --- | --- |
@@ -65,6 +65,6 @@ src/Stalker2/Content/GameLite/DLCGameData/DLC1/NPCPrototypes/
   NPCPrototypes_patch_ClusterfuckRework.cfg                        # Cost of Hope technicians (azot, gumorok/ Jokelet)
 ```
 
-Upgrades are only installable where the technician's own `Upgrades` list contains them, so a new upgrade needs an entry in the NPC patch as well as its prototype and setup-list entry. Only technicians whose vanilla lists include both exoskeleton and Saiga D-12 upgrades get the Clusterfuck upgrades - in the base game that is `garpia_0`, `medlak_0`, `PowerPlug_Pripyat` and `serz_ivaj_0`; the Cost of Hope technicians (`DLC01_azot_0`, `DLC01_gumorok_0` and Jokelet, `DLC01_gumorok_1`) already have that full list.
+Upgrades are only installable where the technician's own `Upgrades` list contains them, so a new upgrade needs an entry in the NPC patch as well as its prototype and setup-list entry. Eligibility is full Saiga D-12 support: in the base game `garpia_0`, `medlak_0`, `PowerPlug_Pripyat`, `serz_ivaj_0` and the generic `AllTechnicianNPC` list; in Cost of Hope `DLC01_azot_0`, `DLC01_gumorok_0` and Jokelet, `DLC01_gumorok_1`.
 
 `package.ps1` builds the distributable zip: `.\package.ps1 -Version 1.0` -> `dist\Stalker2_SACTriadOverhaul_1.0.zip`.
