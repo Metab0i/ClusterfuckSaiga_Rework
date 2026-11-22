@@ -4,7 +4,7 @@ Game-data overhaul for S.T.A.L.K.E.R. 2: new technician upgrades for selected we
 
 ## Install
 
-Copy `ClusterfuckSaigaRework_P.pak` from `Stalker2\Content\Paks\~mods` into your game's `~mods` folder and restart the game.
+Copy `Stalker2_Saiga_AK74S_Clusterf_Overhaul_P.pak` from `Stalker2\Content\Paks\~mods` into your game's `~mods` folder and restart the game.
 
 ## Clusterfuck
 
@@ -56,7 +56,7 @@ Upgrades are only installable where the technician's own `Upgrades` list contain
 
 ## Scripts
 
-`build.ps1` - packs `src\` into `dist\ClusterfuckSaigaRework_P.pak` and installs it into `~mods`.
+`build.ps1` - packs `src\` into `dist\Stalker2_Saiga_AK74S_Clusterf_Overhaul_P.pak` and installs it into `~mods`.
 
 ```powershell
 .\build.ps1                  # build + install
@@ -67,5 +67,5 @@ Upgrades are only installable where the technician's own `Upgrades` list contain
 `package.ps1` - builds the distributable zip with the pak at its game path plus this README.
 
 ```powershell
-.\package.ps1 -Version 1.0   # -> dist\ClusterfuckSaigaRework_1.0.zip
+.\package.ps1 -Version 1.0   # -> dist\Stalker2_Saiga_AK74S_Clusterf_Overhaul_1.0.zip
 ```

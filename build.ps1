@@ -1,7 +1,7 @@
 # Build Stalker 2 - Saiga, AK-74S, Clusterf Overhaul: packs src\ into one game-data pak and installs it.
 #
 #   .\build.ps1                                   -> pack + install into ~mods
-#   .\build.ps1 -NoDeploy                         -> pack only (dist\ClusterfuckSaigaRework_P.pak)
+#   .\build.ps1 -NoDeploy                         -> pack only (dist\Stalker2_Saiga_AK74S_Clusterf_Overhaul_P.pak)
 #   .\build.ps1 -Target "D:\...\Stalker2\Content\Paks\~mods"
 param(
     [switch]$NoDeploy,
@@ -12,7 +12,7 @@ $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
 $srcDir = Join-Path $root "src"
 $distDir = Join-Path $root "dist"
-$pakName = "ClusterfuckSaigaRework_P.pak"
+$pakName = "Stalker2_Saiga_AK74S_Clusterf_Overhaul_P.pak"
 $repak = Join-Path $root "tools\repak\repak.exe"
 
 function Find-GameRoot {

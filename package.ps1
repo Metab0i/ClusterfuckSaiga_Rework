@@ -1,6 +1,6 @@
 # Build the distributable zip: the pak at its game path plus the README.
 #
-#   .\package.ps1 -Version 1.0   -> dist\ClusterfuckSaigaRework_1.0.zip
+#   .\package.ps1 -Version 1.0   -> dist\Stalker2_Saiga_AK74S_Clusterf_Overhaul_1.0.zip
 param(
     [string]$Version = "1.0"
 )
@@ -8,7 +8,7 @@ param(
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
 $distDir = Join-Path $root "dist"
-$pakName = "ClusterfuckSaigaRework_P.pak"
+$pakName = "Stalker2_Saiga_AK74S_Clusterf_Overhaul_P.pak"
 $pak = Join-Path $distDir $pakName
 
 if (-not (Test-Path $pak)) { throw "$pakName not found; run .\build.ps1 -NoDeploy first" }
@@ -20,7 +20,7 @@ New-Item -ItemType Directory -Path $mods -Force | Out-Null
 Copy-Item -LiteralPath $pak -Destination (Join-Path $mods $pakName)
 Copy-Item -LiteralPath (Join-Path $root "README.md") -Destination (Join-Path $stage "README.md")
 
-$zip = Join-Path $distDir "ClusterfuckSaigaRework_$Version.zip"
+$zip = Join-Path $distDir "Stalker2_Saiga_AK74S_Clusterf_Overhaul_$Version.zip"
 if (Test-Path $zip) { Remove-Item -LiteralPath $zip -Force }
 Compress-Archive -Path (Join-Path $stage "*") -DestinationPath $zip -CompressionLevel Optimal
 Write-Host "built $zip"
