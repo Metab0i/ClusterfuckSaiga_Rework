@@ -1,4 +1,4 @@
-# Stalker 2 - Saiga, AK-74S, Clusterf Overhaul
+# Stalker2-SACTriadOverhaul
 
 Game-data overhaul for S.T.A.L.K.E.R. 2: new technician upgrades for selected weapons. Pak only - no DLL, no script extender.
 
@@ -7,12 +7,12 @@ Game-data overhaul for S.T.A.L.K.E.R. 2: new technician upgrades for selected we
 Requires Windows PowerShell 5.1+ and internet on first run (`repak` downloads into `tools\repak`).
 
 ```powershell
-.\build.ps1   # -> dist\nbwpnstriad_overhaul.pak
+.\build.ps1   # -> dist\Stalker2_SACTriadOverhaul.pak
 ```
 
 ## Install
 
-Copy `nbwpnstriad_overhaul.pak` into:
+Copy `Stalker2_SACTriadOverhaul.pak` into:
 
 ```
 <game>\Stalker2\Content\Paks\~mods
@@ -58,4 +58,4 @@ src/Stalker2/Content/GameLite/DLCGameData/DLC1/NPCPrototypes/
 
 Upgrades are only installable where the technician's own `Upgrades` list contains them, so a new upgrade needs an entry in the NPC patch as well as its prototype and setup-list entry. The base patch covers every base-game technician; the DLC patch covers the Cost of Hope technicians in `DLCGameData/DLC1` (`DLC01_azot_0`, `DLC01_gumorok_0` and Jokelet, `DLC01_gumorok_1`).
 
-`package.ps1` builds the distributable zip: `.\package.ps1 -Version 1.0` -> `dist\Stalker2_Saiga_AK74S_Clusterf_Overhaul_1.0.zip`.
+`package.ps1` builds the distributable zip: `.\package.ps1 -Version 1.0` -> `dist\Stalker2_SACTriadOverhaul_1.0.zip`.

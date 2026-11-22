@@ -1,12 +1,12 @@
-# Build Stalker 2 - Saiga, AK-74S, Clusterf Overhaul: packs src\ into one game-data pak.
+# Build Stalker2-SACTriadOverhaul: packs src\ into one game-data pak.
 #
-#   .\build.ps1   -> dist\nbwpnstriad_overhaul.pak
+#   .\build.ps1   -> dist\Stalker2_SACTriadOverhaul.pak
 
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
 $srcDir = Join-Path $root "src"
 $distDir = Join-Path $root "dist"
-$pakName = "nbwpnstriad_overhaul.pak"
+$pakName = "Stalker2_SACTriadOverhaul.pak"
 $repak = Join-Path $root "tools\repak\repak.exe"
 
 if (-not (Test-Path $srcDir)) { throw "source folder not found: $srcDir" }
