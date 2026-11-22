@@ -2,9 +2,23 @@
 
 Game-data overhaul for S.T.A.L.K.E.R. 2: new technician upgrades for selected weapons. Pak only - no DLL, no script extender.
 
+## Build
+
+Requires Windows PowerShell 5.1+ and internet on first run (`repak` downloads into `tools\repak`).
+
+```powershell
+.\build.ps1   # -> dist\Stalker2_Saiga_AK74S_Clusterf_Overhaul_P.pak
+```
+
 ## Install
 
-Copy `Stalker2_Saiga_AK74S_Clusterf_Overhaul_P.pak` from `Stalker2\Content\Paks\~mods` into your game's `~mods` folder and restart the game.
+Copy `Stalker2_Saiga_AK74S_Clusterf_Overhaul_P.pak` into:
+
+```
+<game>\Stalker2\Content\Paks\~mods
+```
+
+Restart the game.
 
 ## Clusterfuck
 
@@ -30,16 +44,6 @@ WIP.
 
 WIP.
 
-## Requirements
-
-`build.ps1` needs:
-
-- Windows with PowerShell 5.1 or newer
-- Internet access on first run: `repak` is downloaded automatically into `tools\repak` if missing
-- No game installation required to build; installation into `~mods` needs the game path or `-Target`
-
-No Python, Node, or game SDK is used by the build.
-
 ## Layout
 
 ```
@@ -54,18 +58,4 @@ src/Stalker2/Content/GameLite/DLCGameData/DLC1/NPCPrototypes/
 
 Upgrades are only installable where the technician's own `Upgrades` list contains them, so a new upgrade needs an entry in the NPC patch as well as its prototype and setup-list entry. The base patch covers every base-game technician; the DLC patch covers the Cost of Hope technicians in `DLCGameData/DLC1` (`DLC01_azot_0`, `DLC01_gumorok_0` and Jokelet, `DLC01_gumorok_1`).
 
-## Scripts
-
-`build.ps1` - packs `src\` into `dist\Stalker2_Saiga_AK74S_Clusterf_Overhaul_P.pak` and installs it into `~mods`.
-
-```powershell
-.\build.ps1                  # build + install
-.\build.ps1 -NoDeploy        # build only
-.\build.ps1 -Target "<game>\Stalker2\Content\Paks\~mods"
-```
-
-`package.ps1` - builds the distributable zip with the pak at its game path plus this README.
-
-```powershell
-.\package.ps1 -Version 1.0   # -> dist\Stalker2_Saiga_AK74S_Clusterf_Overhaul_1.0.zip
-```
+`package.ps1` builds the distributable zip: `.\package.ps1 -Version 1.0` -> `dist\Stalker2_Saiga_AK74S_Clusterf_Overhaul_1.0.zip`.
