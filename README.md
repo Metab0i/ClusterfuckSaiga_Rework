@@ -32,7 +32,7 @@ src/Stalker2/Content/GameLite/GameData/
   WeaponData/WeaponGeneralSetupPrototypes/WeaponGeneralSetupPrototypes_patch_ClusterfuckRework.cfg
 ```
 
-Upgrades are only installable where the technician's own `Upgrades` list contains them, so a new upgrade needs an entry in the NPC patch as well as its prototype and setup-list entry.
+Upgrades are only installable where the technician's own `Upgrades` list contains them, so a new upgrade needs an entry in the NPC patch as well as its prototype and setup-list entry. The patch covers every base-game technician plus the Cost of Hope technicians (`supack_technician_banzaj_0`, `supack_technician_banzaj_fourth_0`).
 
 ## Scripts
 
