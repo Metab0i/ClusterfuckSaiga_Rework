@@ -22,7 +22,7 @@ Restart the game.
 
 ## Clusterfuck
 
-The AR416 "Clusterfuck" keeps its vanilla sway at base. New upgrades at any technician, base game and Cost of Hope:
+The AR416 "Clusterfuck" keeps its vanilla sway at base. The five upgrades are sold only by late-game technicians - the ones who can also install exoskeleton and Saiga D-12 upgrades:
 
 | Upgrade | Part | Cost | Effect |
 | --- | --- | --- | --- |
@@ -49,13 +49,13 @@ WIP.
 ```
 src/Stalker2/Content/GameLite/GameData/
   EffectPrototypes/EffectPrototypes_patch_ClusterfuckRework.cfg
-  NPCPrototypes/NPCPrototypes_patch_ClusterfuckRework.cfg          # adds the upgrades to every base-game technician
+  NPCPrototypes/NPCPrototypes_patch_ClusterfuckRework.cfg          # adds the upgrades to the late-game technicians only
   UpgradePrototypes/UpgradePrototypes_patch_ClusterfuckRework.cfg  # the upgrade nodes themselves
   WeaponData/WeaponGeneralSetupPrototypes/WeaponGeneralSetupPrototypes_patch_ClusterfuckRework.cfg
 src/Stalker2/Content/GameLite/DLCGameData/DLC1/NPCPrototypes/
   NPCPrototypes_patch_ClusterfuckRework.cfg                        # Cost of Hope technicians (azot, gumorok/ Jokelet)
 ```
 
-Upgrades are only installable where the technician's own `Upgrades` list contains them, so a new upgrade needs an entry in the NPC patch as well as its prototype and setup-list entry. The base patch covers every base-game technician; the DLC patch covers the Cost of Hope technicians in `DLCGameData/DLC1` (`DLC01_azot_0`, `DLC01_gumorok_0` and Jokelet, `DLC01_gumorok_1`).
+Upgrades are only installable where the technician's own `Upgrades` list contains them, so a new upgrade needs an entry in the NPC patch as well as its prototype and setup-list entry. Only technicians whose vanilla lists include both exoskeleton and Saiga D-12 upgrades get the Clusterfuck upgrades - in the base game that is `garpia_0`, `medlak_0`, `PowerPlug_Pripyat` and `serz_ivaj_0`; the Cost of Hope technicians (`DLC01_azot_0`, `DLC01_gumorok_0` and Jokelet, `DLC01_gumorok_1`) already have that full list.
 
 `package.ps1` builds the distributable zip: `.\package.ps1 -Version 1.0` -> `dist\Stalker2_SACTriadOverhaul_1.0.zip`.
