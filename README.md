@@ -43,7 +43,7 @@ New upgrades, sold by the same late-game technicians:
 | Upgrade | Part | Cost | Effect |
 | --- | --- | --- | --- |
 | Back-bored barrel | Body | 20,000 | Damage falloff distance × 1.65 |
-| Crowned barrel extension | Body | 15,000 | Full-damage distance raised to 18 m (base 15 m, +20%) |
+| Crowned barrel extension | Body | 15,000 | Full-damage distance raised to 20 m (base 15 m, +33.33%) |
 | Barrel tensioner and handstop | Handguard | 20,000 | Buckshot spread ÷ 1.35 |
 | Skeleton stock and quick-release sling | Stock | 20,000 | Aim time −15%, equip/holster time −15%, ADS movement +20% |
 
