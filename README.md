@@ -13,14 +13,14 @@ The AR416 "Clusterfuck" keeps its vanilla sway at base. New upgrades at any tech
 | Upgrade | Part | Cost | Effect |
 | --- | --- | --- | --- |
 | Adjustable cheek riser | Stock | 10,000 | Sway -40% |
-| Free-float handguard with handstop | Handguard | 10,000 | Sway -40% |
-| Match-length handguard | Handguard | 9,000 | Damage falloff pushed further out (+30%) |
+| Handstop and stippled grip | Grip | 10,000 | Sway -40% |
+| Bedded match barrel | Body | 9,000 | Damage falloff pushed further out (+30%) |
 | High-pressure bolt and chamber | Body | 12,000 | Damage +45% |
 | Cut-rifled AP barrel | Barrel | 7,500 | Armor penetration +25% |
 
-The two sway upgrades stack to roughly the old no-sway baseline. The match-length handguard requires the free-float handguard; the rest are standalone.
+The two sway upgrades stack to roughly the old no-sway baseline. All five are standalone purchases.
 
-Upgrades are plain data - the game's own effect prototypes are reused wherever the values match, and custom effects are defined in the mod so no vanilla stat is changed.
+Upgrades are plain data - the game's own effect prototypes are reused wherever the values match, and custom effects are defined in the mod so no vanilla stat is changed. The Clusterfuck's weapon prototype ships its Handguard section disabled, so its upgrades live on the Stock, Grip, Body and Barrel sections that have markers.
 
 ## Layout
 
