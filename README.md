@@ -14,9 +14,9 @@ The AR416 "Clusterfuck" keeps its vanilla sway at base. New upgrades at any tech
 | --- | --- | --- | --- |
 | Adjustable cheek riser | Stock | 10,000 | Sway -40% |
 | Handstop and stippled grip | Grip | 10,000 | Sway -40% |
-| Bedded match barrel | Body | 9,000 | Damage falloff pushed further out (+30%) |
+| Free-floated match barrel | Body | 9,000 | Damage falloff pushed further out (+30%) |
 | High-pressure bolt and chamber | Body | 12,000 | Damage +45% |
-| Cut-rifled AP barrel | Barrel | 7,500 | Armor penetration +25% |
+| AP-optimised barrel | Barrel | 7,500 | Armor penetration +25% |
 
 The two sway upgrades stack to roughly the old no-sway baseline. All five are standalone purchases.
 
