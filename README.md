@@ -7,12 +7,12 @@ Game-data overhaul for S.T.A.L.K.E.R. 2: new technician upgrades for selected we
 Requires Windows PowerShell 5.1+ and internet on first run (`repak` downloads into `tools\repak`).
 
 ```powershell
-.\build.ps1   # -> dist\Stalker2_Saiga_AK74S_Clusterf_Overhaul_P.pak
+.\build.ps1   # -> dist\nbwpnstriad_overhaul.pak
 ```
 
 ## Install
 
-Copy `Stalker2_Saiga_AK74S_Clusterf_Overhaul_P.pak` into:
+Copy `nbwpnstriad_overhaul.pak` into:
 
 ```
 <game>\Stalker2\Content\Paks\~mods
