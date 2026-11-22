@@ -27,9 +27,12 @@ Upgrades are plain data - the game's own effect prototypes are reused wherever t
 ```
 src/Stalker2/Content/GameLite/GameData/
   EffectPrototypes/EffectPrototypes_patch_ClusterfuckRework.cfg
-  UpgradePrototypes/UpgradePrototypes_patch_ClusterfuckRework.cfg
+  NPCPrototypes/NPCPrototypes_patch_ClusterfuckRework.cfg          # adds the upgrades to every technician
+  UpgradePrototypes/UpgradePrototypes_patch_ClusterfuckRework.cfg  # the upgrade nodes themselves
   WeaponData/WeaponGeneralSetupPrototypes/WeaponGeneralSetupPrototypes_patch_ClusterfuckRework.cfg
 ```
+
+Upgrades are only installable where the technician's own `Upgrades` list contains them, so a new upgrade needs an entry in the NPC patch as well as its prototype and setup-list entry.
 
 ## Scripts
 
