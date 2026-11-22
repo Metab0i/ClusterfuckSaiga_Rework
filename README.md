@@ -55,11 +55,11 @@ Tiered upgrades: tier 1 is sold by any technician, tier 2 by mid-game technician
 
 | Upgrade | Part | Cost | Tier | Effect |
 | --- | --- | --- | --- | --- |
-| Cheek riser and stock pad | Stock | 12,000 | 1 | Sway −20% |
-| Sling-tensioned buttpad | Stock | 15,000 | 2 | Sway −30% |
-| Marksman stock bedding | Stock | 18,000 | 3 | Sway −30% (total −80%) |
-| Reinforced bolt and chamber | Body | 12,000 | 1 | Damage +15% |
-| Match barrel bedding | Body | 16,000 | 2 | Damage +17% |
+| Cheek riser and stock pad | Stock | 12,000 | 1 | Sway −13% |
+| Sling-tensioned buttpad | Stock | 15,000 | 2 | Sway −22% |
+| Marksman stock bedding | Stock | 18,000 | 3 | Sway −30% (total −65%) |
+| Reinforced bolt and chamber | Body | 12,000 | 1 | Damage +17% |
+| Match barrel bedding | Body | 16,000 | 2 | Damage +20% |
 | 5.56x45 conversion | Body | 25,000 | 3 | Armor penetration +40%, caliber changes to 5.56x45 |
 | Crowned long-range barrel | Barrel | 15,000 | 2 | Effective fire distance +15 m (base 30 m) |
 | Match bore and leade | Barrel | 15,000 | 2 | Damage falloff boundary ×1.35 |
