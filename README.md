@@ -42,11 +42,12 @@ New upgrades, sold by the same late-game technicians:
 
 | Upgrade | Part | Cost | Effect |
 | --- | --- | --- | --- |
-| Back-bored barrel | Body | 20,000 | Damage falloff distance doubled |
+| Back-bored barrel | Body | 20,000 | Damage falloff distance × 1.65 |
+| Crowned barrel extension | Body | 15,000 | Full-damage distance raised to 18 m (base 15 m, +20%) |
 | Barrel tensioner and handstop | Handguard | 20,000 | Buckshot spread ÷ 1.75 |
-| Skeleton stock and quick-release sling | Stock | 20,000 | Aim time, equip/holster time ÷ 1.5; ADS movement × 1.5 |
+| Skeleton stock and quick-release sling | Stock | 20,000 | Aim time −15%, equip/holster time −15%, ADS movement +20% |
 
-These stack with the vanilla Saiga upgrades, including `Barrel_1_2`, which already doubles damage falloff on its own.
+These stack with the vanilla Saiga upgrades, including `Barrel_1_2`, which already adds +100% damage falloff on its own.
 
 ## AK-74S
 
