@@ -51,7 +51,24 @@ These stack with the vanilla Saiga upgrades, including `Barrel_1_2`, which alrea
 
 ## AK-74S
 
-WIP.
+Tiered upgrades: tier 1 is sold by any technician, tier 2 by mid-game technicians and up, tier 3 only by the late-game technicians that can install the full Saiga tree (the same ones that get the Clusterfuck upgrades).
+
+| Upgrade | Part | Cost | Tier | Effect |
+| --- | --- | --- | --- | --- |
+| Cheek riser and stock pad | Stock | 12,000 | 1 | Sway −20% |
+| Sling-tensioned buttpad | Stock | 15,000 | 2 | Sway −30% |
+| Marksman stock bedding | Stock | 18,000 | 3 | Sway −30% (total −80%) |
+| Reinforced bolt and chamber | Body | 12,000 | 1 | Damage +15% |
+| Match barrel bedding | Body | 16,000 | 2 | Damage +17% |
+| 5.56x45 conversion | Body | 25,000 | 3 | Armor penetration +40%, caliber changes to 5.56x45 |
+| Crowned long-range barrel | Barrel | 15,000 | 2 | Effective fire distance +15 m (base 30 m) |
+| Match bore and leade | Barrel | 15,000 | 2 | Damage falloff boundary ×1.35 |
+| Extended barrel | Barrel | 20,000 | 3 | Maximum bullet distance ×1.25 |
+| Free-floated barrel bedding | Body | 15,000 | 2 | Base dispersion ÷1.5 |
+| Barrel harmonic dampener | Handguard | 20,000 | 3 | Per-shot dispersion growth ÷1.35 |
+| Recoil buffer and handstop | Handguard | 12,000 | 2 | Recoil ÷1.19 |
+
+The AK-74S ships with its Handguard section disabled; the mod enables it so the dampener and recoil buffer have a marker to live on.
 
 ## Layout
 
